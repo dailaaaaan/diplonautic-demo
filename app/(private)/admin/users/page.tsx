@@ -40,7 +40,9 @@ export default async function AdminUsersPage() {
       </p>
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[7fr_4fr] lg:gap-16">
-        <section aria-labelledby="accounts-title">
+        {/* min-w-0 permite que la columna se encoja y la tabla haga scroll
+            horizontal dentro de su caja, sin ensanchar toda la página. */}
+        <section aria-labelledby="accounts-title" className="min-w-0">
           <h2 id="accounts-title" className="text-2xl">
             Accounts ({users.length})
           </h2>
@@ -87,7 +89,7 @@ export default async function AdminUsersPage() {
                         {user.active ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td className="px-4 py-4 font-mono text-[13px]">
+                    <td className="whitespace-nowrap px-4 py-4 font-mono text-[13px]">
                       {user.createdAt.toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "short",
@@ -123,7 +125,7 @@ export default async function AdminUsersPage() {
 
         <section
           aria-labelledby="new-employee-title"
-          className="self-start border border-line bg-mist p-6 md:p-8"
+          className="min-w-0 border border-line bg-mist p-6 md:p-8 lg:self-start"
         >
           <h2 id="new-employee-title" className="text-2xl">
             New employee
