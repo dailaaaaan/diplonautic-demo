@@ -24,6 +24,8 @@ model User {
   active       Boolean   @default(true)
   createdAt    DateTime  @default(now())
   sessions     Session[]
+  threads      Thread[]
+  replies      Reply[]
 }
 
 model Session {
@@ -32,5 +34,33 @@ model Session {
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+enum Category {
+  QUESTION
+  NOTICE
+  INCIDENT
+}
+
+model Thread {
+  id        Int      @id @default(autoincrement())
+  title     String
+  body      String
+  category  Category
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  replies   Reply[]
+}
+
+model Reply {
+  id        Int      @id @default(autoincrement())
+  body      String
+  threadId  Int
+  // Al borrar un hilo se borran también sus respuestas.
+  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
 }
