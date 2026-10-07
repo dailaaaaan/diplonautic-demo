@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import About from "@/components/About";
+import ContactBanner from "@/components/ContactBanner";
+import Services from "@/components/Services";
 import heroYacht from "@/public/images/hero-yacht.jpg";
 
 const heroFacts = [
@@ -13,7 +16,7 @@ export default function Home() {
     <main className="flex-1">
       <section className="relative overflow-hidden bg-deep text-white">
         {/* En móvil la foto va debajo del texto; en escritorio ocupa la derecha. */}
-        <div className="relative z-10 px-4 py-16 md:px-6 lg:flex lg:min-h-[720px] lg:flex-col lg:justify-center lg:px-16 lg:py-24">
+        <div className="relative z-10 px-4 py-16 md:px-6 lg:flex lg:min-h-[min(calc(100svh-72px),900px)] lg:flex-col lg:justify-center lg:px-16 lg:py-24">
           <div className="lg:max-w-[560px]">
             <p className="font-mono text-xs uppercase tracking-[0.08em] text-line md:text-[13px]">
               41°25′N 2°13′E · Sant Adrià de Besòs, Barcelona
@@ -68,6 +71,10 @@ export default function Home() {
           <div className="absolute inset-0 hidden bg-linear-to-r from-deep via-deep/55 to-transparent lg:block" />
         </div>
       </section>
+
+      <Services />
+      <About />
+      <ContactBanner />
     </main>
   );
 }
