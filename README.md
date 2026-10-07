@@ -14,12 +14,11 @@ Es una demo, no la web oficial de la empresa.
 
 ## Tecnologías
 
-| Capa | Tecnología |
-|---|---|
-| Framework | Next.js 16 (App Router) con TypeScript |
-| Estilos | Tailwind CSS 4 |
-| Base de datos | SQLite con Prisma 7 |
-| Autenticación | Sesiones propias con cookie `httpOnly` y contraseñas cifradas con bcrypt |
+| Capa              | Tecnología                                                               |
+| Framework         | Next.js 16 (App Router) con TypeScript                                   |
+| Estilos           | Tailwind CSS 4                                                           |
+| Base de datos     | SQLite con Prisma 7                                                      |
+| Autenticación     | Sesiones propias con cookie `httpOnly` y contraseñas cifradas con bcrypt |
 
 ## Puesta en marcha
 
@@ -38,10 +37,9 @@ La web queda disponible en http://localhost:3000.
 
 ### Usuarios de prueba
 
-| Rol | Email | Contraseña |
-|---|---|---|
-| Administrador | `admin@diplonautic.com` | `Admin-2026` |
-| Empleado | `marc.soler@diplonautic.com` | `Employee-2026` |
+| Rol                  | Email                         | Contraseña      |
+| Administrador        | `admin@diplonautic.com`       | `Admin-2026`    |
+| Empleado             | `marc.soler@diplonautic.com`  | `Employee-2026` |
 | Empleado desactivado | `jordi.vidal@diplonautic.com` | `Employee-2026` |
 
 La cuenta desactivada sirve para comprobar que no puede iniciar sesión.
@@ -95,13 +93,12 @@ Las decisiones de tecnología, alcance y diseño están explicadas, con su motiv
 
 Se sigue GitHub Flow: la rama `main` contiene siempre una versión que funciona y cada funcionalidad se desarrolla en su propia rama, que se fusiona mediante un Pull Request con descripción.
 
-| Pull Request | Rama | Contenido |
-|---|---|---|
-| #1 | `feature/public-site` | Base de diseño, página de inicio y contacto |
-| #2 | `feature/auth` | Base de datos, login, sesiones y roles |
-| #3 | `feature/admin-users` | Alta y desactivación de empleados |
-| #4 | `feature/forum` | Hilos, respuestas y moderación |
-| #5 | `feature/seed-docs` | Documentación final e icono |
+| Pull Request | Rama                  | Contenido                                    |
+| #1           | `feature/public-site` | Base de diseño, página de inicio y contacto  |
+| #2           | `feature/auth`        | Base de datos, login, sesiones y roles       |
+| #3           | `feature/admin-users` | Alta y desactivación de empleados            |
+| #4           | `feature/forum`       | Hilos, respuestas y moderación               |
+| #5           | `feature/seed-docs`   | Documentación final e icono                  |
 
 Los commits siguen el formato Conventional Commits, con la descripción en español.
 
@@ -114,19 +111,10 @@ El proyecto se ha desarrollado con Claude Code como herramienta de apoyo, tal co
 - **El repositorio se maneja a mano.** Los commits, los Pull Request y las fusiones no los hace la herramienta. Así cada cambio pasa por una revisión antes de entrar en el historial.
 - **Verificación de cada cambio.** Además del linter, la comprobación de tipos y la compilación, el login, la gestión de usuarios y el foro se probaron de extremo a extremo, incluidos los intentos de saltarse los permisos: enviar formularios sin sesión, con un rol insuficiente o con datos falsificados.
 - **Documentación de la versión exacta.** Antes de usar una API de Next.js se consultó la documentación incluida en la versión instalada, porque Next.js 16 cambia cosas respecto a versiones anteriores.
-- **Decisiones corregidas sobre la marcha.** No todo lo que propuso la herramienta se aceptó: se cambió el idioma de la web a inglés al ver la web actual de la empresa, se sustituyó el azul de la portada y se recortó el detalle de diseño del archivo de contexto.
+- **Decisiones corregidas sobre la marcha.** No todo lo que propuso la herramienta se aceptó: se cambió el idioma de la web a inglés al ver la web actual de la empresa, se sustituyó el azul de la portada y se recortó el detalle de diseño del archivo de contexto entre otros muchos cabios tanto de diseño como el limite hasta donde podía llegar la IA
+- **Comprobacion de Seguridad en la web.** La IA realza varios intentos de vulneraciones de la pagina para comprobar su seguridad, se hae un breve informe por el cual debe ser revisado y aprobado por Dylan.
 
 No se han usado agentes en paralelo, skills ni conexiones con servicios externos: el proyecto es pequeño y cada funcionalidad depende de la anterior, así que no había trabajo que repartir.
-
-## Limitaciones y siguientes pasos
-
-Lo que quedaría por hacer en una versión real:
-
-- Envío real del formulario de contacto.
-- Recuperación y cambio de contraseña por parte del empleado.
-- Límite de intentos de inicio de sesión.
-- Edición de mensajes y paginación del foro.
-- Pruebas automáticas dentro del repositorio.
 
 ## Créditos de las fotografías
 
