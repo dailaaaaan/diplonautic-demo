@@ -33,7 +33,8 @@ El razonamiento de cada decisión está en `docs/DECISIONS.md`.
 
 ## Idioma
 
-- Textos de la web, documentación, comentarios, commits y PR: español.
+- Textos de la web: inglés, como la web actual de la empresa.
+- Documentación, comentarios, commits y PR: español.
 - Nombres de variables, funciones, archivos y carpetas: inglés.
 
 ## Diseño
@@ -44,6 +45,7 @@ Paleta:
 |---|---|
 | `#355070` | Principal: cabecera, botones, enlaces |
 | `#3d5a80` | Secundario: hover, bloques destacados |
+| `#0e2a47` | Azul profundo: fondo de la portada y de la cabecera |
 | `#293241` | Texto y pie de página |
 | `#98c1d9` | Bordes, iconos, etiquetas |
 | `#e0fbfc` | Fondos suaves de sección |

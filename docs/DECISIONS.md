@@ -44,8 +44,8 @@ Registro de las decisiones tomadas y su motivo. El enunciado deja varias a elecc
 
 **Motivo:** el tipo (`feat`, `fix`, `docs`...) permite entender el historial de un vistazo, y el español es el idioma del equipo que va a revisarlo.
 
-## 8. Web en español
+## 8. Web en inglés
 
-**Decisión:** los textos de la web están en español.
+**Decisión:** los textos de la web están en inglés. La documentación, los comentarios, los commits y los Pull Request siguen en español.
 
-**Motivo:** la empresa y sus clientes principales están en Barcelona. Los nombres del código se mantienen en inglés por convención.
+**Motivo:** la web actual de la empresa está en inglés y el sector náutico trabaja con armadores y tripulaciones de muchos países, así que la demo mantiene el idioma que la empresa ya usa de cara al público. La documentación se queda en español porque es el idioma del equipo que va a revisarla.
