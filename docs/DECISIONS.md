@@ -49,3 +49,21 @@ Registro de las decisiones tomadas y su motivo. El enunciado deja varias a elecc
 **Decisión:** los textos de la web están en inglés. La documentación, los comentarios, los commits y los Pull Request siguen en español.
 
 **Motivo:** la web actual de la empresa está en inglés y el sector náutico trabaja con armadores y tripulaciones de muchos países, así que la demo mantiene el idioma que la empresa ya usa de cara al público. La documentación se queda en español porque es el idioma del equipo que va a revisarla.
+
+## 9. Renderizado clásico, sin Cache Components
+
+**Decisión:** se desactiva la opción `cacheComponents` que la plantilla de Next.js 16 trae activada.
+
+**Motivo:** con esa opción, cualquier página que lea la sesión o la base de datos tiene que envolverse en límites de `Suspense` y decidir qué se cachea. Es una optimización pensada para aplicaciones grandes. En esta demo las páginas públicas siguen siendo estáticas y las privadas se generan en cada petición, que es justo lo que se necesita, y el código queda más corto y fácil de explicar.
+
+## 10. Sesiones guardadas como hash
+
+**Decisión:** la cookie lleva un token aleatorio y en la base de datos se guarda su hash SHA-256, no el token.
+
+**Motivo:** si alguien llegara a leer la tabla de sesiones, no podría usar su contenido para suplantar a un usuario. Es el mismo principio que se aplica a las contraseñas, que se guardan cifradas con bcrypt.
+
+## 11. Adaptador libSQL para SQLite
+
+**Decisión:** Prisma se conecta a SQLite mediante el adaptador `@prisma/adapter-libsql`.
+
+**Motivo:** Prisma 7 exige un adaptador para cada base de datos. Este funciona con un archivo local sin compilar nada al instalar, y es el mismo que usa Turso, de modo que desplegar la demo solo requeriría cambiar la URL de conexión.
