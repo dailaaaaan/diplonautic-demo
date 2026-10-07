@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Paleta y fuentes del proyecto. Cada variable genera clases de Tailwind:
+   --color-primary da bg-primary, text-primary y border-primary;
+   --font-display da font-display. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-primary: #355070; /* cabecera, botones, enlaces */
+  --color-secondary: #3d5a80; /* hover, bloques destacados */
+  --color-deep: #0e2a47; /* fondo de la portada y bloques oscuros */
+  --color-ink: #293241; /* texto y pie de página */
+  --color-line: #98c1d9; /* bordes, iconos, etiquetas */
+  --color-mist: #e0fbfc; /* fondos suaves de sección */
+  --color-accent: #ee6c4d; /* solo la acción principal de cada página */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-archivo);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+/* Contorno visible al navegar con teclado en cualquier elemento interactivo. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
