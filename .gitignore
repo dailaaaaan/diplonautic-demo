@@ -4,10 +4,22 @@ node_modules/
 # Compilación de Next.js
 .next/
 out/
+build/
+
+# Archivos que TypeScript y Next.js generan solos
+*.tsbuildinfo
+next-env.d.ts
+
+# Pruebas
+coverage/
+
+# Despliegue en Vercel
+.vercel
 
 # Variables de entorno (nunca se suben: contienen secretos)
 .env
 .env*.local
+*.pem
 
 # Base de datos local de SQLite
 *.db
@@ -15,6 +27,7 @@ out/
 
 # Notas locales de trabajo y documentos que no pertenecen al repositorio
 CLAUDE.local.md
+AI_LOG.md
 *.pdf
 
 # Sistema operativo y editor
@@ -24,3 +37,6 @@ Thumbs.db
 
 # Registros
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
