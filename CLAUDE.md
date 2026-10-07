@@ -29,7 +29,7 @@ El razonamiento de cada decisión está en `docs/DECISIONS.md`.
 - Tailwind CSS
 - Prisma con SQLite en local
 - Sesiones con cookie httpOnly y contraseñas cifradas con bcrypt
-- Despliegue opcional al final: Vercel con Turso
+- Despliegue opcional: Vercel con Turso
 
 ## Idioma
 
@@ -57,43 +57,6 @@ Dirección visual:
 - Esquinas rectas, bordes finos, sin degradados llamativos ni emojis.
 - El naranja con texto blanco pequeño no tiene contraste suficiente: usarlo con texto oscuro o grande.
 - Imágenes de bancos libres de derechos; no se reutilizan las de la web real de la empresa.
-
-Tipografía (Google Fonts, cargadas con `next/font`):
-
-| Uso | Fuente | Detalle |
-|---|---|---|
-| Titulares | Archivo | Peso 600–700, ancho expandido (`font-stretch: 125%`), interlineado 1.1 |
-| Texto | IBM Plex Sans | Peso 400, y 500 para énfasis; interlineado 1.6 |
-| Etiquetas y datos | IBM Plex Mono | Mayúsculas, 13px, espaciado entre letras 0.08em. Para coordenadas, fechas, categorías y numeración |
-
-Tamaños de texto (escritorio / móvil):
-
-| Elemento | Escritorio | Móvil |
-|---|---|---|
-| Titular de portada (h1) | 64px | 36px |
-| Título de sección (h2) | 40px | 28px |
-| Subtítulo (h3) | 24px | 20px |
-| Texto | 17px | 16px |
-| Texto secundario | 15px | 14px |
-| Etiquetas | 13px | 12px |
-
-Medidas:
-
-- Ancho máximo del contenido: 1200px, con margen lateral de 24px (16px en móvil).
-- Ancho máximo de los párrafos: 65 caracteres, para que se lean con comodidad.
-- Espaciado en múltiplos de 8px. Separación vertical entre secciones: 96px (56px en móvil).
-- Cabecera de 72px de alto, fija al hacer scroll.
-- Botones y campos de formulario de 48px de alto, con 24px de relleno horizontal.
-- Radio de las esquinas: 2px. Bordes de 1px en `#98c1d9`.
-- Sin sombras, salvo una muy leve en la cabecera fija.
-
-Comportamiento:
-
-- Puntos de corte de Tailwind: `sm` 640px, `md` 768px, `lg` 1024px, `xl` 1280px. Se diseña primero para móvil.
-- Transiciones de 150ms solo en color y fondo. Sin animaciones de entrada al hacer scroll.
-- Todo elemento interactivo tiene estado `hover` y un `focus` visible (contorno de 2px en `#ee6c4d`).
-- Contraste mínimo AA: 4.5:1 en texto normal y 3:1 en texto grande.
-- Imágenes con `next/image`, con texto alternativo y tamaño definido para evitar saltos al cargar.
 
 ## Código
 
