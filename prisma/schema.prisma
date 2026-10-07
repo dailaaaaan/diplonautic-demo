@@ -1,0 +1,36 @@
+// Esquema de la base de datos: cada "model" es una tabla.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  EMPLOYEE
+  ADMIN
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(EMPLOYEE)
+  // Un empleado desactivado conserva sus datos pero no puede iniciar sesión.
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  sessions     Session[]
+}
+
+model Session {
+  // Hash del token que viaja en la cookie; el token en claro no se guarda.
+  id        String   @id
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}

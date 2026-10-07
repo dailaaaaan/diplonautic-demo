@@ -40,3 +40,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+
+# Cliente de Prisma: se genera a partir del esquema con "prisma generate"
+/generated
