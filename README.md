@@ -22,7 +22,26 @@ Demo funcional de una web corporativa con área privada para empleados, desarrol
 
 ## Puesta en marcha
 
-Las instrucciones de instalación y los usuarios de prueba se añadirán cuando el proyecto base esté creado.
+Requisitos: Node.js 20 o superior.
+
+```bash
+npm install
+cp .env.example .env    # en Windows: copy .env.example .env
+npm run db:setup        # crea la base de datos y los usuarios de prueba
+npm run dev
+```
+
+La web queda disponible en http://localhost:3000.
+
+### Usuarios de prueba
+
+| Rol | Email | Contraseña |
+|---|---|---|
+| Administrador | `admin@diplonautic.com` | `Admin-2026` |
+| Empleado | `marc.soler@diplonautic.com` | `Employee-2026` |
+| Empleado desactivado | `jordi.vidal@diplonautic.com` | `Employee-2026` |
+
+La cuenta desactivada sirve para comprobar que no puede iniciar sesión.
 
 ## Decisiones
 
