@@ -1,0 +1,26 @@
+# Dependencias
+node_modules/
+
+# Compilación de Next.js
+.next/
+out/
+
+# Variables de entorno (nunca se suben: contienen secretos)
+.env
+.env*.local
+
+# Base de datos local de SQLite
+*.db
+*.db-journal
+
+# Notas locales de trabajo y documentos que no pertenecen al repositorio
+CLAUDE.local.md
+*.pdf
+
+# Sistema operativo y editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Registros
+npm-debug.log*
