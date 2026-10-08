@@ -67,3 +67,15 @@ Registro de las decisiones tomadas y su motivo. El enunciado deja varias a elecc
 **Decisión:** Prisma se conecta a SQLite mediante el adaptador `@prisma/adapter-libsql`.
 
 **Motivo:** Prisma 7 exige un adaptador para cada base de datos. Este funciona con un archivo local sin compilar nada al instalar, y es el mismo que usa Turso, de modo que desplegar la demo solo requeriría cambiar la URL de conexión.
+
+## 12. Movimiento con CSS, sin librerías
+
+**Decisión:** las animaciones (entrada de la portada, acercamiento lento de la fotografía y efectos al pasar el ratón) se hacen con CSS, definidas en `app/globals.css`. Se desactivan para quien tiene activada la opción "reducir movimiento" en su sistema.
+
+**Motivo:** una librería de animación añadiría una dependencia y código difícil de explicar para efectos que CSS resuelve en pocas líneas. El movimiento se limita a la portada y a las interacciones: no hay animaciones al hacer scroll en cada sección, que es el recurso más repetido en las webs de plantilla.
+
+## 13. La cabecera es un componente de cliente
+
+**Decisión:** `components/Header.tsx` pasa a ejecutarse también en el navegador.
+
+**Motivo:** necesita dos datos que solo existen ahí: la posición del scroll, para ser transparente sobre la fotografía de la portada y tomar fondo al bajar, y la ruta actual, para marcar el enlace de la página en la que se está. No lee la sesión, así que las páginas públicas siguen siendo estáticas.
