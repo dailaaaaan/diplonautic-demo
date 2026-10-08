@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { logout } from "@/app/actions/auth";
+import PrivateNav from "@/components/PrivateNav";
 import { requireUser } from "@/lib/session";
 
 // Envuelve todas las páginas privadas. La comprobación se hace en el
@@ -15,22 +15,7 @@ export default async function PrivateLayout({
     <>
       <div className="border-b border-line bg-mist">
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 px-4 py-3 md:px-6 lg:px-16">
-          <nav aria-label="Staff area" className="flex items-center gap-6">
-            <Link
-              href="/forum"
-              className="text-[15px] font-medium text-primary transition-colors duration-150 hover:text-secondary"
-            >
-              Forum
-            </Link>
-            {user.role === "ADMIN" && (
-              <Link
-                href="/admin/users"
-                className="text-[15px] font-medium text-primary transition-colors duration-150 hover:text-secondary"
-              >
-                Users
-              </Link>
-            )}
-          </nav>
+          <PrivateNav isAdmin={user.role === "ADMIN"} />
 
           <div className="flex items-center gap-4">
             <p className="font-mono text-xs uppercase tracking-[0.08em]">
