@@ -1,9 +1,12 @@
 "use server";
 
-import bcrypt from "bcryptjs";
+// Controlador de autenticación. Lee el formulario, llama al servicio y
+// decide la respuesta (crear la cookie y redirigir). No contiene reglas de
+// negocio: están en server/services/auth.ts.
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/db";
 import { createSession, deleteSession } from "@/lib/session";
+import { checkCredentials } from "@/server/services/auth";
+import { normalizeEmail } from "@/server/validation/users";
 
 export type LoginState = {
   error?: string;
@@ -14,27 +17,16 @@ export async function login(
   previousState: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
-  // Los datos del formulario se validan siempre en el servidor.
-  const email = String(formData.get("email") ?? "")
-    .trim()
-    .toLowerCase();
+  const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
 
-  if (!email || !password) {
-    return { error: "Enter your email and password.", email };
+  const result = await checkCredentials(email, password);
+  if (!result.ok) {
+    // Se devuelve el email para que el formulario no se vacíe.
+    return { error: result.error, email: normalizeEmail(email) };
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  const passwordMatches = user
-    ? await bcrypt.compare(password, user.passwordHash)
-    : false;
-
-  // El mismo mensaje en todos los casos, para no revelar qué emails existen.
-  if (!user || !passwordMatches || !user.active) {
-    return { error: "Invalid email or password.", email };
-  }
-
-  await createSession(user.id);
+  await createSession(result.userId);
   redirect("/forum");
 }
 
