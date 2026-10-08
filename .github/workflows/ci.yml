@@ -1,0 +1,42 @@
+# Integración continua: en cada Pull Request y en cada cambio en main,
+# GitHub instala el proyecto y comprueba que pasa el linter, las pruebas
+# y la compilación.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    name: Lint, tests and build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Preparar las variables de entorno
+        run: cp .env.example .env
+
+      - name: Generar el cliente de Prisma
+        run: npx prisma generate
+
+      - name: Linter
+        run: npm run lint
+
+      - name: Pruebas unitarias
+        run: npm test
+
+      - name: Compilación de producción
+        run: npm run build

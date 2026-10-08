@@ -79,3 +79,19 @@ Registro de las decisiones tomadas y su motivo. El enunciado deja varias a elecc
 **Decisión:** `components/Header.tsx` pasa a ejecutarse también en el navegador.
 
 **Motivo:** necesita dos datos que solo existen ahí: la posición del scroll, para ser transparente sobre la fotografía de la portada y tomar fondo al bajar, y la ruta actual, para marcar el enlace de la página en la que se está. No lee la sesión, así que las páginas públicas siguen siendo estáticas.
+
+## 14. Arquitectura por capas
+
+**Decisión:** el código se separa en presentación (`app/`, `components/`), controladores (`app/actions/`), servicios (`server/services/`) y repositorios (`server/repositories/`). Cada capa solo llama a la que tiene debajo, y solo los repositorios usan Prisma.
+
+**Motivo:** en la primera versión las acciones de servidor mezclaban la lectura del formulario, la validación, las reglas de negocio y las consultas, y las páginas consultaban la base de datos directamente. Con las capas, el frontend y el backend quedan separados, las reglas se pueden probar sin base de datos y cambiar de base de datos solo afectaría a los repositorios.
+
+Se valoró la arquitectura hexagonal, que invierte las dependencias mediante interfaces para que las reglas no conozcan la infraestructura. Para cuatro tablas habría triplicado el número de archivos sin resolver ningún problema real del proyecto. Las capas son el paso previo: si la aplicación creciera, bastaría con añadir interfaces sobre los repositorios que ya existen.
+
+Tampoco se separa en dos aplicaciones (una API y un frontend aparte): obligaría a reescribir el proyecto y a perder la ventaja de tener interfaz y servidor en un solo repositorio. Con el backend aislado en `server/`, extraerlo a una API sería posible sin tocar las reglas.
+
+## 15. Pruebas unitarias con Vitest
+
+**Decisión:** las reglas de negocio y la validación tienen pruebas unitarias en `tests/unit/`, ejecutadas con Vitest. GitHub Actions las ejecuta, junto con el linter y la compilación, en cada Pull Request.
+
+**Motivo:** las pruebas dejan constancia de que las reglas se cumplen (una cuenta desactivada no entra, solo el administrador borra, la contraseña se guarda cifrada) y avisan si un cambio futuro las rompe. Los servicios se prueban con los repositorios simulados, de modo que cada prueba es rápida y comprueba una sola regla. Se eligió Vitest porque entiende TypeScript sin configuración adicional.

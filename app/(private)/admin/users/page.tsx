@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { setUserActive } from "@/app/actions/users";
-import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/session";
+import { listUsers } from "@/server/services/users";
 import CreateUserForm from "./CreateUserForm";
 
 export const metadata: Metadata = {
@@ -15,18 +15,8 @@ export default async function AdminUsersPage() {
   // Solo administradores: un empleado que escriba la URL vuelve al foro.
   const admin = await requireAdmin();
 
-  // Se piden solo las columnas que se muestran, nunca el hash de la contraseña.
-  const users = await prisma.user.findMany({
-    orderBy: { createdAt: "asc" },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      active: true,
-      createdAt: true,
-    },
-  });
+  // La página no consulta la base de datos: se lo pide al servicio.
+  const users = await listUsers();
 
   return (
     <main className="flex-1 px-4 py-14 md:px-6 md:py-20 lg:px-16">

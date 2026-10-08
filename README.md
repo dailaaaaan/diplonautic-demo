@@ -20,10 +20,11 @@ Es una demo, no la web oficial de la empresa.
 | Estilos | Tailwind CSS 4 |
 | Base de datos | SQLite con Prisma 7 |
 | Autenticación | Sesiones propias con cookie `httpOnly` y contraseñas cifradas con bcrypt |
+| Pruebas | Vitest, con integración continua en GitHub Actions |
 
 ## Puesta en marcha
 
-Requisitos: Node.js 20 o superior.
+Requisitos: Node.js 22 o superior.
 
 ```bash
 npm install
@@ -55,28 +56,69 @@ La cuenta desactivada sirve para comprobar que no puede iniciar sesión.
 5. **Administrador**: entrar como administrador, crear un empleado en "Users", desactivarlo y comprobar que ya no puede entrar.
 6. **Moderación**: como administrador, borrar una respuesta o un hilo.
 
+## Arquitectura
+
+El código se organiza en capas, y cada capa solo llama a la que tiene debajo:
+
+| Capa | Carpeta | Responsabilidad |
+|---|---|---|
+| Presentación | `app/`, `components/` | Páginas y componentes. Solo pintan y recogen formularios. |
+| Controladores | `app/actions/` | Leen el formulario, comprueban la sesión, llaman a un servicio y redirigen. |
+| Servicios | `server/services/` | Las reglas de negocio: quién puede hacer qué y en qué condiciones. |
+| Repositorios | `server/repositories/` | El acceso a datos. Es el único sitio que usa Prisma. |
+
+La validación de datos está en `server/validation/`, como funciones puras.
+
+Así el frontend (`app/`, `components/`) y el backend (`server/`) quedan separados: las páginas no consultan la base de datos y los servicios no conocen Next.js. Cambiar de base de datos solo afectaría a los repositorios, y las reglas de negocio se prueban sin base de datos ni servidor.
+
 ## Estructura del proyecto
 
 ```
-app/
+app/                    PRESENTACIÓN Y CONTROLADORES
   page.tsx              Página de inicio
   contact/              Página de contacto
   login/                Inicio de sesión
   (private)/            Zona privada: comprueba la sesión en su layout
     forum/              Listado, hilo y formulario de hilo nuevo
     admin/users/        Panel de gestión de usuarios
-  actions/              Acciones de servidor: auth, users y forum
+  actions/              Controladores: auth, users y forum
 components/             Cabecera, pie y secciones de la página de inicio
+server/                 BACKEND
+  services/             Reglas de negocio: auth, sessions, users y forum
+  repositories/         Acceso a datos con Prisma: users, sessions y forum
+  validation/           Validación de formularios, como funciones puras
 lib/
   db.ts                 Conexión con la base de datos
-  session.ts            Sesiones y comprobación de rol
+  session.ts            Cookie de sesión y comprobación de rol
   forum.ts              Categorías y formato de fecha
+tests/unit/             Pruebas unitarias, con la misma estructura que server/
 prisma/
   schema.prisma         Tablas: User, Session, Thread y Reply
   migrations/           Historial de cambios de la base de datos
   seed.ts               Datos de prueba
+.github/workflows/      Integración continua: linter, pruebas y compilación
 docs/DECISIONS.md       Decisiones tomadas y su motivo
 ```
+
+## Pruebas
+
+```bash
+npm test
+```
+
+Hay 111 pruebas unitarias, escritas con Vitest, en `tests/unit/`:
+
+| Carpeta | Qué comprueba |
+|---|---|
+| `validation/` | La validación de usuarios y del foro: casos válidos, límites de longitud y datos falsificados. |
+| `services/` | Las reglas de negocio, con los repositorios simulados: login, alta y desactivación de empleados, sesiones, y creación y moderación de hilos. |
+| `lib/` | Las utilidades: categorías, formato de fecha e iniciales. |
+
+Entre otras cosas, comprueban que el login responde igual si falla el email o la contraseña, que una cuenta desactivada no puede entrar, que la contraseña se guarda cifrada, que un administrador no puede desactivarse a sí mismo y que solo un administrador puede borrar hilos.
+
+Los servicios se prueban sin base de datos: el repositorio se sustituye por uno simulado, de modo que cada prueba comprueba solo la regla.
+
+En cada Pull Request, GitHub Actions ejecuta el linter, las pruebas y la compilación (`.github/workflows/ci.yml`).
 
 ## Seguridad
 
@@ -104,6 +146,7 @@ Se sigue GitHub Flow: la rama `main` contiene siempre una versión que funciona 
 | #5 | `feature/seed-docs` | Documentación final e icono |
 | #6 | `feature/responsive` | Menú para móvil y ajustes en pantallas pequeñas |
 | #7 | `feature/polish` | Animaciones, cabecera sobre la portada, página 404 y avisos del foro |
+| #8 | `refactor/layered-architecture` | Arquitectura por capas, pruebas unitarias e integración continua |
 
 Los commits siguen el formato Conventional Commits, con la descripción en español.
 

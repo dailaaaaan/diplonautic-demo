@@ -5,9 +5,9 @@ import { deleteReply, deleteThread } from "@/app/actions/forum";
 import Avatar from "@/components/Avatar";
 import CategoryBadge from "@/components/CategoryBadge";
 import Notice from "@/components/Notice";
-import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/forum";
 import { requireUser } from "@/lib/session";
+import { getThread } from "@/server/services/forum";
 import ReplyForm from "./ReplyForm";
 
 export const metadata: Metadata = {
@@ -30,21 +30,9 @@ export default async function ThreadPage({
   // El id llega en la URL (/forum/12). Si no es un número o el hilo no
   // existe, se muestra la página 404.
   const { id } = await params;
-  const threadId = Number(id);
-  if (!Number.isInteger(threadId)) {
-    notFound();
-  }
 
-  const thread = await prisma.thread.findUnique({
-    where: { id: threadId },
-    include: {
-      author: { select: { name: true } },
-      replies: {
-        orderBy: { createdAt: "asc" },
-        include: { author: { select: { name: true } } },
-      },
-    },
-  });
+  // La página no consulta la base de datos: se lo pide al servicio.
+  const thread = await getThread(Number(id));
   if (!thread) {
     notFound();
   }

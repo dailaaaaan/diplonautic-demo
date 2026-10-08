@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import CategoryBadge from "@/components/CategoryBadge";
 import Notice from "@/components/Notice";
-import { prisma } from "@/lib/db";
-import { categories, formatDate, isCategory } from "@/lib/forum";
+import { categories, formatDate } from "@/lib/forum";
 import { requireUser } from "@/lib/session";
+import { listThreads, parseCategoryFilter } from "@/server/services/forum";
 
 export const metadata: Metadata = {
   title: "Forum — Diplonautic",
@@ -21,16 +21,10 @@ export default async function ForumPage({
   // válida, se ignora y se muestran todos los hilos. "deleted" llega tras
   // borrar un hilo, para mostrar un aviso de confirmación.
   const { category, deleted } = await searchParams;
-  const activeCategory = category && isCategory(category) ? category : null;
+  const activeCategory = parseCategoryFilter(category);
 
-  const threads = await prisma.thread.findMany({
-    where: activeCategory ? { category: activeCategory } : undefined,
-    orderBy: { createdAt: "desc" },
-    include: {
-      author: { select: { name: true } },
-      _count: { select: { replies: true } },
-    },
-  });
+  // La página no consulta la base de datos: se lo pide al servicio.
+  const threads = await listThreads(activeCategory);
 
   const filterClass = (isActive: boolean) =>
     `flex h-10 items-center rounded-[2px] border px-4 text-[15px] transition-colors duration-150 ${

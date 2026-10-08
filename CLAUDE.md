@@ -29,7 +29,25 @@ El razonamiento de cada decisión está en `docs/DECISIONS.md`.
 - Tailwind CSS
 - Prisma con SQLite en local
 - Sesiones con cookie httpOnly y contraseñas cifradas con bcrypt
+- Pruebas unitarias con Vitest
 - Despliegue opcional: Vercel con Turso
+
+## Arquitectura
+
+El código se organiza en capas. Cada capa solo llama a la que tiene debajo:
+
+1. **Presentación** (`app/`, `components/`): páginas y componentes. Solo pintan.
+2. **Controladores** (`app/actions/`): leen el formulario, comprueban la sesión, llaman a un servicio y redirigen. Sin reglas de negocio.
+3. **Servicios** (`server/services/`): las reglas de negocio. No conocen Next.js ni Prisma.
+4. **Repositorios** (`server/repositories/`): el único sitio que usa Prisma.
+
+La validación de datos vive en `server/validation/`, como funciones puras.
+
+Normas:
+
+- Ninguna página, componente o acción importa Prisma: piden los datos a un servicio.
+- Toda regla de negocio nueva va en un servicio y lleva su prueba en `tests/unit/`.
+- `npm test` debe pasar antes de cada commit.
 
 ## Idioma
 
@@ -68,9 +86,9 @@ Dirección visual:
 
 ## Git
 
-- GitHub Flow: `main` siempre funciona; cada funcionalidad va en su rama `feature/...` y se fusiona con un Pull Request.
+- GitHub Flow: `main` siempre funciona; cada cambio va en su rama (`feature/...` o `refactor/...`) y se fusiona con un Pull Request.
 - Commits pequeños con formato Conventional Commits y descripción en español, por ejemplo `feat: añade el formulario de creación de hilos`.
-- Tipos usados: `feat`, `fix`, `docs`, `style`, `refactor`, `chore`.
+- Tipos usados: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `ci`, `chore`.
 - Cada PR describe qué cambia, por qué y cómo probarlo.
 
 ## Plan de ramas
@@ -81,4 +99,5 @@ Dirección visual:
 4. `feature/forum` — listado, creación de hilos y respuestas
 5. `feature/seed-docs` — datos de prueba y documentación final
 6. `feature/responsive` — ajuste a móvil y tablet
-7. `feature/deploy` — despliegue en Vercel con Turso (opcional)
+7. `feature/polish` — animaciones, cabecera, página 404 y avisos del foro
+8. `refactor/layered-architecture` — arquitectura por capas, pruebas unitarias e integración continua
