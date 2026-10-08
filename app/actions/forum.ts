@@ -18,6 +18,7 @@ export type ThreadFormState = {
 
 export type ReplyFormState = {
   error?: string;
+  success?: string;
   body?: string;
 };
 
@@ -55,7 +56,8 @@ export async function createThread(
   });
 
   revalidatePath("/forum");
-  redirect(`/forum/${thread.id}`);
+  // "created=1" hace que la página del hilo muestre un aviso de confirmación.
+  redirect(`/forum/${thread.id}?created=1`);
 }
 
 export async function createReply(
@@ -87,7 +89,7 @@ export async function createReply(
 
   revalidatePath(`/forum/${thread.id}`);
   revalidatePath("/forum");
-  return {};
+  return { success: "Reply posted." };
 }
 
 // Moderación: solo el administrador puede borrar hilos y respuestas.
@@ -103,7 +105,7 @@ export async function deleteThread(formData: FormData) {
   await prisma.thread.deleteMany({ where: { id: threadId } });
 
   revalidatePath("/forum");
-  redirect("/forum");
+  redirect("/forum?deleted=1");
 }
 
 export async function deleteReply(formData: FormData) {

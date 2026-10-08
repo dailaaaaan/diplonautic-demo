@@ -38,6 +38,11 @@ export default function ReplyForm({ threadId }: { threadId: number }) {
           {state.error}
         </p>
       )}
+      {state.success && (
+        <p role="status" className="border-l-2 border-primary pl-3 text-[15px]">
+          {state.success}
+        </p>
+      )}
 
       <button
         type="submit"

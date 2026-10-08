@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CategoryBadge from "@/components/CategoryBadge";
+import Notice from "@/components/Notice";
 import { prisma } from "@/lib/db";
 import { categories, formatDate, isCategory } from "@/lib/forum";
 import { requireUser } from "@/lib/session";
@@ -12,13 +13,14 @@ export const metadata: Metadata = {
 export default async function ForumPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; deleted?: string }>;
 }) {
   await requireUser();
 
   // El filtro llega en la URL (?category=NOTICE). Si no es una categoría
-  // válida, se ignora y se muestran todos los hilos.
-  const { category } = await searchParams;
+  // válida, se ignora y se muestran todos los hilos. "deleted" llega tras
+  // borrar un hilo, para mostrar un aviso de confirmación.
+  const { category, deleted } = await searchParams;
   const activeCategory = category && isCategory(category) ? category : null;
 
   const threads = await prisma.thread.findMany({
@@ -54,6 +56,12 @@ export default async function ForumPage({
         </Link>
       </div>
 
+      {deleted && (
+        <div className="mt-8">
+          <Notice>Thread deleted.</Notice>
+        </div>
+      )}
+
       <nav aria-label="Filter by category" className="mt-10 flex flex-wrap gap-3">
         <Link href="/forum" className={filterClass(activeCategory === null)}>
           All
@@ -79,12 +87,12 @@ export default async function ForumPage({
             <li key={thread.id} className="border-b border-line">
               <Link
                 href={`/forum/${thread.id}`}
-                className="grid gap-3 py-6 transition-colors duration-150 hover:bg-mist md:grid-cols-[120px_1fr_auto] md:items-center md:gap-6 md:px-4"
+                className="group grid gap-3 py-6 transition-colors duration-150 hover:bg-mist md:grid-cols-[120px_1fr_auto] md:items-center md:gap-6 md:px-4"
               >
                 <div>
                   <CategoryBadge category={thread.category} />
                 </div>
-                <div>
+                <div className="transition-transform duration-200 group-hover:translate-x-1">
                   <h2 className="text-xl">{thread.title}</h2>
                   <p className="mt-2 font-mono text-[13px] text-ink/70">
                     {thread.author.name} · {formatDate(thread.createdAt)}
@@ -93,6 +101,12 @@ export default async function ForumPage({
                 <p className="font-mono text-[13px] uppercase tracking-[0.08em] text-primary">
                   {thread._count.replies}{" "}
                   {thread._count.replies === 1 ? "reply" : "replies"}
+                  <span
+                    aria-hidden="true"
+                    className="ml-3 inline-block transition-transform duration-200 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
                 </p>
               </Link>
             </li>
