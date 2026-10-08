@@ -1,27 +1,20 @@
-import { createHash, randomBytes } from "node:crypto";
+// Une la sesión con Next.js: lee y escribe la cookie y redirige. Las reglas
+// (crear la sesión, comprobar que es válida) están en el servicio de sesiones.
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
-import { prisma } from "@/lib/db";
+import {
+  endSession,
+  getUserFromToken,
+  startSession,
+} from "@/server/services/sessions";
 
 const SESSION_COOKIE = "session";
-const SESSION_DAYS = 7;
 
-// En la base de datos se guarda el hash del token, no el token. Si alguien
-// leyera la tabla de sesiones, no podría usarlas para entrar.
-function hashToken(token: string) {
-  return createHash("sha256").update(token).digest("hex");
-}
-
-// Crea la sesión en la base de datos y envía el token al navegador en una
-// cookie httpOnly, que no es accesible desde JavaScript.
+// Crea la sesión y envía el token al navegador en una cookie httpOnly, que
+// no es accesible desde JavaScript.
 export async function createSession(userId: number) {
-  const token = randomBytes(32).toString("hex");
-  const expiresAt = new Date(Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000);
-
-  await prisma.session.create({
-    data: { id: hashToken(token), userId, expiresAt },
-  });
+  const { token, expiresAt } = await startSession(userId);
 
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE, token, {
@@ -42,19 +35,7 @@ export const getCurrentUser = cache(async () => {
     return null;
   }
 
-  const session = await prisma.session.findUnique({
-    where: { id: hashToken(token) },
-    include: { user: true },
-  });
-
-  // Sin sesión, sesión caducada o empleado desactivado: no hay usuario.
-  if (!session || session.expiresAt < new Date() || !session.user.active) {
-    return null;
-  }
-
-  // Solo se devuelven los datos necesarios, nunca el hash de la contraseña.
-  const { id, name, email, role } = session.user;
-  return { id, name, email, role };
+  return getUserFromToken(token);
 });
 
 // Para páginas y acciones privadas: si no hay sesión, envía al login.
@@ -81,7 +62,7 @@ export async function deleteSession() {
   const token = cookieStore.get(SESSION_COOKIE)?.value;
 
   if (token) {
-    await prisma.session.deleteMany({ where: { id: hashToken(token) } });
+    await endSession(token);
   }
   cookieStore.delete(SESSION_COOKIE);
 }
