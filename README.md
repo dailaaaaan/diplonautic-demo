@@ -103,6 +103,7 @@ Se sigue GitHub Flow: la rama `main` contiene siempre una versión que funciona 
 | #4 | `feature/forum` | Hilos, respuestas y moderación |
 | #5 | `feature/seed-docs` | Documentación final e icono |
 | #6 | `feature/responsive` | Menú para móvil y ajustes en pantallas pequeñas |
+| #7 | `feature/polish` | Animaciones, cabecera sobre la portada, página 404 y avisos del foro |
 
 Los commits siguen el formato Conventional Commits, con la descripción en español.
 

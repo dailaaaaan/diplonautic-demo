@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteReply, deleteThread } from "@/app/actions/forum";
+import Avatar from "@/components/Avatar";
 import CategoryBadge from "@/components/CategoryBadge";
+import Notice from "@/components/Notice";
 import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/forum";
 import { requireUser } from "@/lib/session";
@@ -17,8 +19,10 @@ const deleteButtonClass =
 
 export default async function ThreadPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ created?: string }>;
 }) {
   const user = await requireUser();
   const isAdmin = user.role === "ADMIN";
@@ -45,6 +49,9 @@ export default async function ThreadPage({
     notFound();
   }
 
+  // Tras crear un hilo, la acción redirige aquí con ?created=1.
+  const { created } = await searchParams;
+
   return (
     <main className="flex-1 px-4 py-14 md:px-6 md:py-20 lg:px-16">
       <div className="max-w-[820px]">
@@ -55,12 +62,21 @@ export default async function ThreadPage({
           ← Back to threads
         </Link>
 
+        {created && (
+          <div className="mt-6">
+            <Notice>Thread published.</Notice>
+          </div>
+        )}
+
         <article className="mt-6">
           <CategoryBadge category={thread.category} />
           <h1 className="mt-4 text-3xl md:text-[40px]">{thread.title}</h1>
-          <p className="mt-4 font-mono text-[13px] text-ink/70">
-            {thread.author.name} · {formatDate(thread.createdAt)}
-          </p>
+          <div className="mt-4 flex items-center gap-3">
+            <Avatar name={thread.author.name} />
+            <p className="font-mono text-[13px] text-ink/70">
+              {thread.author.name} · {formatDate(thread.createdAt)}
+            </p>
+          </div>
           {/* whitespace-pre-line respeta los saltos de línea del mensaje. */}
           <p className="mt-6 whitespace-pre-line text-base md:text-[17px]">
             {thread.body}
@@ -88,21 +104,27 @@ export default async function ThreadPage({
           ) : (
             <ol className="mt-6 border-t border-line">
               {thread.replies.map((reply) => (
-                <li key={reply.id} className="border-b border-line py-6">
-                  <p className="font-mono text-[13px] text-ink/70">
-                    {reply.author.name} · {formatDate(reply.createdAt)}
-                  </p>
-                  <p className="mt-3 whitespace-pre-line text-base md:text-[17px]">
-                    {reply.body}
-                  </p>
-                  {isAdmin && (
-                    <form action={deleteReply} className="mt-4">
-                      <input type="hidden" name="replyId" value={reply.id} />
-                      <button type="submit" className={deleteButtonClass}>
-                        Delete reply
-                      </button>
-                    </form>
-                  )}
+                <li
+                  key={reply.id}
+                  className="flex gap-4 border-b border-line py-6"
+                >
+                  <Avatar name={reply.author.name} />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-[13px] text-ink/70">
+                      {reply.author.name} · {formatDate(reply.createdAt)}
+                    </p>
+                    <p className="mt-3 whitespace-pre-line text-base md:text-[17px]">
+                      {reply.body}
+                    </p>
+                    {isAdmin && (
+                      <form action={deleteReply} className="mt-4">
+                        <input type="hidden" name="replyId" value={reply.id} />
+                        <button type="submit" className={deleteButtonClass}>
+                          Delete reply
+                        </button>
+                      </form>
+                    )}
+                  </div>
                 </li>
               ))}
             </ol>

@@ -10,7 +10,13 @@ type NavLink = {
 
 // Menú desplegable para pantallas pequeñas. Es un componente de cliente
 // porque necesita recordar si está abierto o cerrado.
-export default function MobileMenu({ links }: { links: NavLink[] }) {
+export default function MobileMenu({
+  links,
+  activeHref,
+}: {
+  links: NavLink[];
+  activeHref?: string;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -38,7 +44,12 @@ export default function MobileMenu({ links }: { links: NavLink[] }) {
                 <Link
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="flex h-12 items-center text-base text-mist transition-colors duration-150 hover:text-white"
+                  aria-current={link.href === activeHref ? "page" : undefined}
+                  className={`flex h-12 items-center border-l-2 pl-3 text-base transition-colors duration-150 hover:text-white ${
+                    link.href === activeHref
+                      ? "border-accent text-white"
+                      : "border-transparent text-mist"
+                  }`}
                 >
                   {link.label}
                 </Link>
