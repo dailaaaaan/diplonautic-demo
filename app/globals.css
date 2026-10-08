@@ -15,6 +15,42 @@
   --font-display: var(--font-archivo);
   --font-sans: var(--font-plex-sans);
   --font-mono: var(--font-plex-mono);
+
+  /* Animaciones. Cada variable genera una clase: animate-fade-up, etc. */
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-slow-zoom: slow-zoom 24s ease-in-out infinite alternate;
+}
+
+/* Entrada de la portada: el elemento aparece subiendo unos píxeles. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Acercamiento lento y continuo de la fotografía de portada. */
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+/* Quien tiene activado "reducir movimiento" en su sistema no ve animaciones. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 body {

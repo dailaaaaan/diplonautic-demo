@@ -1,9 +1,12 @@
 import Link from "next/link";
+import ChartLines from "@/components/ChartLines";
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-mist">
-      <div className="grid gap-10 px-4 py-14 md:grid-cols-3 md:px-6 lg:px-16">
+    <footer className="relative overflow-hidden bg-ink text-mist">
+      <ChartLines className="text-line opacity-10" />
+
+      <div className="relative grid gap-10 px-4 py-14 md:grid-cols-3 md:px-6 lg:px-16">
         <div>
           <p className="font-display text-lg font-bold tracking-[0.04em] text-white [font-stretch:125%]">
             DIPLONAUTIC
@@ -65,7 +68,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10 px-4 py-5 font-mono text-[11px] uppercase tracking-[0.08em] text-line md:px-6 lg:px-16">
+      <div className="relative border-t border-white/10 px-4 py-5 font-mono text-[11px] uppercase tracking-[0.08em] text-line md:px-6 lg:px-16">
         Demo project · Not the official Diplonautic website
       </div>
     </footer>
