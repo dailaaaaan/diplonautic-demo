@@ -143,6 +143,8 @@ En cada Pull Request, GitHub Actions ejecuta el linter, las pruebas y la compila
 
 Las decisiones de tecnología, alcance y diseño están explicadas, con su motivo, en [docs/DECISIONS.md](docs/DECISIONS.md).
 
+La referencia técnica del código (qué hace cada archivo, modelo de datos, flujos, seguridad y dónde tocar para cada cambio) está en [docs/TECHNICAL.md](docs/TECHNICAL.md).
+
 ## Flujo de trabajo con Git
 
 Se sigue GitHub Flow: la rama `main` contiene siempre una versión que funciona y cada funcionalidad se desarrolla en su propia rama, que se fusiona mediante un Pull Request con descripción.
