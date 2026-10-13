@@ -4,6 +4,16 @@ Demo funcional de una web corporativa con área privada para empleados, desarrol
 
 Es una demo, no la web oficial de la empresa.
 
+## Capturas
+
+| Página de inicio | Foro interno |
+|---|---|
+| ![Portada de la web pública, con la fotografía de un yate](docs/screenshots/01-home.jpg) | ![Listado de hilos del foro, con categoría, autor y fecha](docs/screenshots/04-forum.jpg) |
+| **Hilo con respuestas** | **Gestión de usuarios** |
+| ![Un hilo del foro con sus respuestas y la moderación del administrador](docs/screenshots/05-thread.jpg) | ![Panel del administrador con las cuentas y el alta de empleados](docs/screenshots/06-admin-users.jpg) |
+| **Inicio de sesión** | **Contacto** |
+| ![Formulario de inicio de sesión de empleados](docs/screenshots/03-login.jpg) | ![Página de contacto con los datos del taller y el formulario](docs/screenshots/02-contact.jpg) |
+
 ## Qué incluye
 
 - **Web pública**: página de inicio con la presentación de la empresa y sus servicios, y página de contacto con un formulario solo visual.
